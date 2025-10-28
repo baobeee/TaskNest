@@ -10,6 +10,8 @@ const port = process.env.PORT || 8081;
 
 connectdDB();
 
+app.use(express.json());
+
 app.use("/api/tasks", taskRoute);
 
 app.listen(8081, () => {
