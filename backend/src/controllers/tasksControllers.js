@@ -2,7 +2,7 @@ import Task from "../models/Task.js";
 
 export const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find(); //findALl, k có await Promise này sẽ hiểu đây k phải là kết quả cần trả ra
+    const tasks = await Task.find().sort({ createdAt: -1 }); //findALl, k có await Promise này sẽ hiểu đây k phải là kết quả cần trả ra, lấy từ dưới lên
     res.status(200).json(tasks); //200 = success, return json
   } catch (error) {
     console.log("Error in getAllTaks", error); //lỗi ở backend
@@ -37,7 +37,7 @@ export const updateTask = async (req, res) => {
     );
 
     if (!updatedTask) {
-      return res.status(404).json({ message: "The task does not exist" });
+      return res.status(404).json({ message: "The task does not exist." });
     }
     return res.status(200).json(updatedTask);
   } catch (error) {
@@ -46,6 +46,15 @@ export const updateTask = async (req, res) => {
   }
 };
 
-export const deleteTask = (req, res) => {
-  res.status(200).json({ message: "Task deleted successfully" });
+export const deleteTask = async (req, res) => {
+  try {
+    const deleteTask = await Task.findByIdAndDelete(req.params.id);
+    if (!deleteTask) {
+      return res.status(404).json({ message: "The task does not exist." });
+    }
+    res.status(200).json(deleteTask);
+  } catch (error) {
+    console.log("Error in deleteTask", error);
+    res.status(500).json({ message: "System error" });
+  }
 };

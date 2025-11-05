@@ -8,12 +8,13 @@ const app = express();
 dotenv.config();
 const port = process.env.PORT || 8081;
 
-connectdDB();
-
 app.use(express.json());
 
 app.use("/api/tasks", taskRoute);
 
-app.listen(8081, () => {
-  console.log(`Server is running in port ${port}`);
+//connect db trước mới chạy app
+connectdDB().then(() => {
+  app.listen(8081, () => {
+    console.log(`Server is running in port ${port}`);
+  });
 });
