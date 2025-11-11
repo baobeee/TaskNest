@@ -9,7 +9,16 @@ import React from 'react'
 
 const HomePage = () => {
   return (
-    <div className='container pt-8 mx-auto'>
+
+    <div className="min-h-screen w-full bg-[#020617] relative">
+  {/* Dark Radial Glow Background */}
+  <div
+    className="absolute inset-0 z-0"
+    style={{
+      backgroundImage: `radial-gradient(circle 500px at 50% 200px, #3e3e3e, transparent)`,
+    }}
+  />
+      <div className='container pt-8 mx-auto relative z-10'>
       <div className='w-full max-w-2xl p-6 mx-auto space-y-6'>
 
         {/* đầu trang */}
@@ -35,6 +44,9 @@ const HomePage = () => {
       </div>
 
     </div>
+</div>
+
+   
     
   )
 }

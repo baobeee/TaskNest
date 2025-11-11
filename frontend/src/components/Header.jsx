@@ -2,7 +2,14 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <div>Header</div>
+    <div className='space-y-2 text-center'>
+      {/* lấy màu bg làm màu chữ: bg-clip-text */}
+      <h1 className='text-4xl font-bold text-transparent bg-primary bg-clip-text'>TaskNest</h1>
+
+      
+
+      <p className='text-muted-foreground'>Không có việc gì khó, chỉ sợ mình không làm</p>
+    </div>
   )
 }
 
