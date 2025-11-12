@@ -5,9 +5,33 @@ import Header from '@/components/Header'
 import StatsAndFilters from '@/components/StatsAndFilters'
 import TaskList from '@/components/TaskList'
 import TaskListPagination from '@/components/TaskListPagination'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 const HomePage = () => {
+
+  //gom dữ liêu lại mới xử lý tiếp
+  const [taskBuffer, settaskBuffer] = useState([]);
+
+  //theo dõi state
+  //chạy 1 lần duy nhất khi trong deps là mảng rỗng
+  useEffect(()=>{
+    fetchTask()
+  }, []);
+
+  //lấy ds nhiệm vụ
+  const fetchTask = async ()=>{
+    try {
+      const res = await fetch('http://localhost:8081/api/tasks')
+      const data = await res.json()
+      settaskBuffer(data)
+      console.log(data);
+    } catch (error) {
+      console.error("Lỗi xảy ra khi truy xuất Tasks: ", error)
+      toast.error("Lỗi xảy ra khi truy xuất Tasks.")
+    }
+  } 
+
   return (
 
     <div className="min-h-screen w-full bg-[#020617] relative">

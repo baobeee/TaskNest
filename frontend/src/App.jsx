@@ -7,7 +7,7 @@ function App() {
   
   return (
     <>
-    <Toaster/>
+    <Toaster richColors/>
 
     {/* bật chế độ Routing */}
     <BrowserRouter>

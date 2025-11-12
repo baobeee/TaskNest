@@ -45,6 +45,7 @@ const TaskCard = ({task, index}) => {
                     <p className={cn(
                         "text-base transition-all duration-200"
                     , 
+                    // hoàn thành rồi sẽ có đoạn gạch ngang chữ
                         task.status ==='completed' ? "line-through text-muted-foreground" : "text-foreground" 
                     )}>
                         {task.title}
