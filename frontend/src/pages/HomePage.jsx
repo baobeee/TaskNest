@@ -7,11 +7,15 @@ import TaskList from '@/components/TaskList'
 import TaskListPagination from '@/components/TaskListPagination'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import axios from 'axios'
 
 const HomePage = () => {
 
-  //gom dữ liêu lại mới xử lý tiếp
+  //gom dữ liêu lại mới xử lý taskList
   const [taskBuffer, settaskBuffer] = useState([]);
+
+  const [activeTaskCount, setActiveTaskCount] = useState(0)
+  const [completeTaskCount, setCompleteTaskCount] = useState(0)
 
   //theo dõi state
   //chạy 1 lần duy nhất khi trong deps là mảng rỗng
@@ -22,10 +26,12 @@ const HomePage = () => {
   //lấy ds nhiệm vụ
   const fetchTask = async ()=>{
     try {
-      const res = await fetch('http://localhost:8081/api/tasks')
-      const data = await res.json()
-      settaskBuffer(data)
-      console.log(data);
+      const res = await axios.get('http://localhost:8081/api/tasks')
+      settaskBuffer(res.data.tasks)
+
+      //lấy số lượng
+      setActiveTaskCount(res.data.activeCount)
+      setCompleteTaskCount(res.data.completedCount)
     } catch (error) {
       console.error("Lỗi xảy ra khi truy xuất Tasks: ", error)
       toast.error("Lỗi xảy ra khi truy xuất Tasks.")
@@ -52,10 +58,13 @@ const HomePage = () => {
         <AddTask/>
 
         {/* thống kê và bộ lọc */}
-        <StatsAndFilters/>
+        <StatsAndFilters 
+          activeTasksCount={activeTaskCount}
+          completedTasksCount={completeTaskCount}
+        />
 
         {/* Danh sách nhiệm vụ */}
-        <TaskList/>
+        <TaskList filteredTask={taskBuffer}/>
 
         {/* Phân trang và lọc theo Date */}
         <div className='flex flex-col items-center justify-between gap-6 sm: flex-row'>
@@ -64,7 +73,11 @@ const HomePage = () => {
             <DateTime/>
         </div>
         
-      <Footer/>
+
+      <Footer 
+        activeTasksCount={activeTaskCount} 
+        completedTasksCount={completeTaskCount}
+      /> 
       </div>
 
     </div>

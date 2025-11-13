@@ -1,6 +1,8 @@
 import React from 'react'
 
 const Footer = ({completedTasksCount = 0, activeTasksCount = 0}) => {
+
+
   return (
     <>
     {/* render dựa trên tổng số lượng công việc đã hoàn thành và đang làm */}
@@ -19,9 +21,9 @@ const Footer = ({completedTasksCount = 0, activeTasksCount = 0}) => {
           )}
           
           {/* chưa hoàn thành công việc nào*/}
-          {completedTasksCount === 0 && activeTasksCount === 0 &&(
+          {completedTasksCount === 0 && activeTasksCount > 0 &&(
             <>
-              Bạn cần phải làm {activeTasksCount} công việc.
+              Bạn có {activeTasksCount} công việc cần phải làm.
             </>
           )}
         </p>

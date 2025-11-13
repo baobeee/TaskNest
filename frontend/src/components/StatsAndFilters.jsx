@@ -9,19 +9,19 @@ const StatsAndFilters = ({completedTasksCount = 0, activeTasksCount = 0, filter 
     <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
       {/* Phần thông kê */}
       <div className='flex gap-3'>                                                                                                                                                                 
-        <Badge variant="secondary" className='bg-white/50 text-accent-foreground border-info/20'>
+        <Badge variant="secondary" className='bg-white/20 text-accent-foreground border-info/20 py-2'>
         {/* hiển thị số nhiệm vụ đang làm kèm chữ được khai báo ở data*/}
           {activeTasksCount} {FilterType.active}
         </Badge>
 
-        <Badge variant="secondary" className='bg-white/50 text-success border-success/20'>
+        <Badge variant="secondary" className='bg-white/20 text-success border-success/20 py-2'>
         {/* hiển thị số nhiệm vụ hoàn thành kèm chữ được khai báo ở data*/}
           {completedTasksCount} {FilterType.completed}
         </Badge>
       </div>
 
       {/* Phần filter */}
-      <div className='flex flex-col gap-2 sm:flex-row'>
+      <div className='flex flex-col text-accent-foreground gap-2 sm:flex-row'>
         {
         Object.keys(FilterType).map((type)=>(
           <Button
