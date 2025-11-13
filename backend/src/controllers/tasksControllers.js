@@ -1,9 +1,33 @@
 import Task from "../models/Task.js";
-
 export const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find().sort({ createdAt: -1 }); //findALl, k có await Promise này sẽ hiểu đây k phải là kết quả cần trả ra, lấy từ dưới lên
-    res.status(200).json(tasks); //200 = success, return json
+    //kĩ thuật Aggregate Pipesline, giúp xử lí nhiều việc cùng 1 lúc mà chỉ gửi 1 request tránh làm giảm tốc độ
+    const result = await Task.aggregate([
+      {
+        //có thể thực hiện nhiều việc cùng lúc
+        $facet: {
+          //gọi công việc, sắp xếp theo thời gian tạo
+          tasks: [{ $sort: { createdAt: -1 } }],
+
+          //lọc ra công việc theo status, đếm số lượng sau khi lọc
+          activeCount: [{ $match: { status: "active" } }, { $count: "count" }], //đếm số nhiệm vụ active
+
+          completedCount: [
+            { $match: { status: "complete" } }, //đếm số nhiệm vụ complete
+            { $count: "count" },
+          ],
+        },
+      },
+    ]);
+
+    //lấy các nhiệm vụ sau khi đã sắp xếp
+    const tasks = result[0].tasks; //lấy ra dữ liệu đầu tiên trong data
+    //lấy dữ liệu đầu tiên vầ kiểm tra mảng rỗng, nếu rỗng sẽ = 0
+    const activeCount = result[0].activeCount[0]?.count || 0;
+    const completedCount = result[0].completedCount[0]?.count || 0;
+
+    //gửi về frontend
+    res.status(200).json({ tasks, activeCount, completedCount }); //200 = success, return json
   } catch (error) {
     console.log("Error in getAllTaks", error); //lỗi ở backend
     res.status(500).json({ message: "System error" }); //dẩy lỗi ra api respone
