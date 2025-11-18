@@ -16,6 +16,7 @@ const HomePage = () => {
 
   const [activeTaskCount, setActiveTaskCount] = useState(0)
   const [completeTaskCount, setCompleteTaskCount] = useState(0)
+  const [filter, setFilter] = useState("all")
 
   //theo dõi state
   //chạy 1 lần duy nhất khi trong deps là mảng rỗng
@@ -31,12 +32,25 @@ const HomePage = () => {
 
       //lấy số lượng
       setActiveTaskCount(res.data.activeCount)
-      setCompleteTaskCount(res.data.completedCount)
+      setCompleteTaskCount(res.data.completeCount)
     } catch (error) {
       console.error("Lỗi xảy ra khi truy xuất Tasks: ", error)
       toast.error("Lỗi xảy ra khi truy xuất Tasks.")
     }
   } 
+
+  // arr lưu ds nhiệm vụ đã lọc
+  const filteredTasks = taskBuffer.filter((task)=>{
+    switch (filter) {
+      case 'active':
+        return task.status === 'active'
+    
+      case 'completed':
+        return task.status === 'completed'
+      default:
+        return true
+    }
+  })
 
   return (
 
@@ -55,16 +69,19 @@ const HomePage = () => {
         <Header/>
 
         {/* tạo nhiệm vụ */}
-        <AddTask/>
+        <AddTask handleNewTaskAdded={fetchTask}/>
 
         {/* thống kê và bộ lọc */}
         <StatsAndFilters 
+          filter={filter}
+          setFilter={setFilter}
           activeTasksCount={activeTaskCount}
           completedTasksCount={completeTaskCount}
+          
         />
 
         {/* Danh sách nhiệm vụ */}
-        <TaskList filteredTask={taskBuffer}/>
+        <TaskList filteredTask={filteredTasks} filter={filter}/>
 
         {/* Phân trang và lọc theo Date */}
         <div className='flex flex-col items-center justify-between gap-6 sm: flex-row'>

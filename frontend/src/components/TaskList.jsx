@@ -2,8 +2,7 @@ import React from 'react'
 import TaskEmptyState from './TaskEmptyState'
 import TaskCard from './TaskCard'
 
-const TaskList = ({filteredTask}) => {
-  let filter = 'all'
+const TaskList = ({filteredTask, filter}) => {
 
   // Check valid
   if(!filteredTask || filteredTask.length === 0){
