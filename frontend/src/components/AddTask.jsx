@@ -4,7 +4,7 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
-import axios from 'axios'
+import api from '@/lib/axios'
 
 export const AddTask = ({handleNewTaskAdded}) => {
 
@@ -13,7 +13,7 @@ export const AddTask = ({handleNewTaskAdded}) => {
   const addTask = async ()=>{
     if(newTaskTitle.trim()){
       try {
-        await axios.post("http://localhost:8081/api/tasks", {title: newTaskTitle})
+        await api.post("/tasks", {title: newTaskTitle})
         toast.success(`Nhiệm vụ ${newTaskTitle} được thêm thành công.`)
         handleNewTaskAdded()
       } catch (error) {
@@ -47,6 +47,7 @@ export const AddTask = ({handleNewTaskAdded}) => {
         <Button
           variant="gradient" size="xl"  className="px-6"
           onClick = {addTask}
+          disabled = {!newTaskTitle.trim()}//disable khi ô nhập chỉ có khoảng trắng
           >
           <Plus/>
           Add

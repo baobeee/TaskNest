@@ -3,10 +3,23 @@ import { Card } from './ui/card';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Calendar, Calendar1, CheckCircle2, Circle, Delete, DeleteIcon, SquarePen, Trash2 } from 'lucide-react';
+import api from '@/lib/axios';
+import { toast } from 'sonner';
 
-const TaskCard = ({task, index}) => {
+const TaskCard = ({task, index, handleTaskChanged}) => {
     let isEditting = false;
     
+    const deleteTask = async (taskId)=>{
+        try {
+            await api.delete(`/tasks/${taskId}`)
+            toast.success(`Nhiệm vụ đã xóa.`)
+            handleTaskChanged()// gọi lại component cha
+        } catch (error) {
+            console.error('Lỗi khi xóa: ', error)
+            toast.error('Có lỗi khi xóa nhiệm vụ.')
+        }
+    }
+
   return (
     <Card clas className={cn(
         "p-4 bg-gradient-card border-0 shadow-custom-md hover:shadow-custom-lg transition-all duration-200 animate-fade-in group",
@@ -96,6 +109,7 @@ const TaskCard = ({task, index}) => {
                     variant='ghost'
                     size='icon'
                     className='shrink-0 transition-colors size-8 text-muted-foreground hover:text-destructive'
+                    onClick={()=>{deleteTask(task._id)}}
 
                 >
                     <Trash2 className='size-4'/>

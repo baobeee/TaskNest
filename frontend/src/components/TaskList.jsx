@@ -2,7 +2,7 @@ import React from 'react'
 import TaskEmptyState from './TaskEmptyState'
 import TaskCard from './TaskCard'
 
-const TaskList = ({filteredTask, filter}) => {
+const TaskList = ({filteredTask, filter, handleTaskChanged}) => {
 
   // Check valid
   if(!filteredTask || filteredTask.length === 0){
@@ -18,6 +18,7 @@ const TaskList = ({filteredTask, filter}) => {
           key={task._id ?? index}
           task={task}
           index={index}
+          handleTaskChanged={handleTaskChanged}
         />
       ))}
     </div>

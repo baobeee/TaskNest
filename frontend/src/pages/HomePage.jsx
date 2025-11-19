@@ -7,7 +7,7 @@ import TaskList from '@/components/TaskList'
 import TaskListPagination from '@/components/TaskListPagination'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import axios from 'axios'
+import api from '@/lib/axios'
 
 const HomePage = () => {
 
@@ -27,7 +27,7 @@ const HomePage = () => {
   //lấy ds nhiệm vụ
   const fetchTask = async ()=>{
     try {
-      const res = await axios.get('http://localhost:8081/api/tasks')
+      const res = await api.get('/tasks')
       settaskBuffer(res.data.tasks)
 
       //lấy số lượng
@@ -37,6 +37,11 @@ const HomePage = () => {
       console.error("Lỗi xảy ra khi truy xuất Tasks: ", error)
       toast.error("Lỗi xảy ra khi truy xuất Tasks.")
     }
+  } 
+
+  //gọi lại fetchTask
+  const handleTaskChanged = ()=>{
+    fetchTask()
   } 
 
   // arr lưu ds nhiệm vụ đã lọc
@@ -69,7 +74,7 @@ const HomePage = () => {
         <Header/>
 
         {/* tạo nhiệm vụ */}
-        <AddTask handleNewTaskAdded={fetchTask}/>
+        <AddTask handleNewTaskAdded={handleTaskChanged}/>
 
         {/* thống kê và bộ lọc */}
         <StatsAndFilters 
@@ -81,7 +86,9 @@ const HomePage = () => {
         />
 
         {/* Danh sách nhiệm vụ */}
-        <TaskList filteredTask={filteredTasks} filter={filter}/>
+        <TaskList filteredTask={filteredTasks} filter={filter}
+          handleTaskChanged={handleTaskChanged}//lấy từ taskList, taskList lấy props từ taskCard
+        />
 
         {/* Phân trang và lọc theo Date */}
         <div className='flex flex-col items-center justify-between gap-6 sm: flex-row'>
