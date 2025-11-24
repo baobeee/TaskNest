@@ -30,9 +30,9 @@ const HomePage = () => {
       const res = await api.get('/tasks')
       settaskBuffer(res.data.tasks)
 
-      //lấy số lượng
+      //lấy số lượng của 2 trạng thái công việc đang làm/hoàn thành
       setActiveTaskCount(res.data.activeCount)
-      setCompleteTaskCount(res.data.completeCount)
+      setCompleteTaskCount(res.data.completedCount)
     } catch (error) {
       console.error("Lỗi xảy ra khi truy xuất Tasks: ", error)
       toast.error("Lỗi xảy ra khi truy xuất Tasks.")

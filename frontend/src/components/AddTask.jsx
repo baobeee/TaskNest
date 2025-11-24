@@ -14,16 +14,16 @@ export const AddTask = ({handleNewTaskAdded}) => {
     if(newTaskTitle.trim()){
       try {
         await api.post("/tasks", {title: newTaskTitle})
-        toast.success(`Nhiệm vụ ${newTaskTitle} được thêm thành công.`)
+        toast.success(`Công việc ${newTaskTitle} được thêm thành công.`)
         handleNewTaskAdded()
       } catch (error) {
         console.error('Lỗi xảy ra khi thêm task.', error)
-        toast.error("Lỗi xảy ra khi thêm nhiệm vụ mới.")
+        toast.error("Lỗi xảy ra khi thêm công việc mới.")
       }
 
       setNewTaskTitle("")//reset
     }else{
-      console.log("Bạn cần nhập nội dung nhiệm vụ")
+      console.log("Bạn cần nhập nội dung công việc")
     }
   }
 
