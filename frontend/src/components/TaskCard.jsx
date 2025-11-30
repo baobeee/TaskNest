@@ -87,7 +87,7 @@ const TaskCard = ({task, index, handleTaskChanged}) => {
                 size= 'icon'
                 className={cn(
                     'shrink-0 size-8 rounded-full transition-all duration-200', 
-                    task.status === 'completed' ? 'text-success hover:text-success/80':
+                    task.status === 'complete' ? 'text-success hover:text-success/80':
                                                   'text-muted-foreground hover:text-primary'
                 )}
                 onClick={toggleTaskCompleteButton}

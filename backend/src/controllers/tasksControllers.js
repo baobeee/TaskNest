@@ -1,8 +1,37 @@
 import Task from "../models/Task.js";
 export const getAllTasks = async (req, res) => {
+  const { filter = "today" } = req.query;
+  const now = new Date(); // thời gian hiện tại
+  let startDate; //mốc thời gian bắt đâu tính nhiệm vụ lọc
+
+  switch (filter) {
+    case "today":
+      startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // yyyy/MM/dd 00:00
+      break;
+    case "week":
+      //thấy thứ 2 làm mốc và lùi về thứ 2 theo công thức
+      //date= ngày, day= thứ | day===0 ? 7 : 0 là ngày chủ nhật vì trong day chủ nhật = 0 nên nếu là chủ nhật sẽ -7 khác chủ nhật  thì -0
+      const mondayDate =
+        now.getDate() - (now.getDay() - 1) - (now.getDay() === 0 ? 7 : 0);
+      startDate = new Date(now.getFullYear(), now.getMonth(), mondayDate);
+      break;
+
+    case "month":
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1); // ngày đầu tiên của tháng
+      break;
+
+    case "all":
+    default: {
+      startDate = null;
+    }
+  }
+
+  const query = startDate ? { createdAt: { $gte: startDate } } : {};
+
   try {
     //kĩ thuật Aggregate Pipesline, giúp xử lí nhiều việc cùng 1 lúc mà chỉ gửi 1 request tránh làm giảm tốc độ
     const result = await Task.aggregate([
+      { $match: query },
       {
         //có thể thực hiện nhiều việc cùng lúc
         $facet: {

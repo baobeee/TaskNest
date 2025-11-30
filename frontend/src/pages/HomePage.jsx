@@ -1,5 +1,5 @@
 import { AddTask } from '@/components/AddTask'
-import DateTime from '@/components/DateTime'
+import DateTime from '@/components/DateTimeFilter'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import StatsAndFilters from '@/components/StatsAndFilters'
@@ -17,17 +17,18 @@ const HomePage = () => {
   const [activeTaskCount, setActiveTaskCount] = useState(0)
   const [completeTaskCount, setCompleteTaskCount] = useState(0)
   const [filter, setFilter] = useState("all")
+  const [dateQuery, setDateQuery] = useState('today')
 
   //theo dõi state
   //chạy 1 lần duy nhất khi trong deps là mảng rỗng
   useEffect(()=>{
     fetchTask()
-  }, []);
+  }, [dateQuery]);
 
   //lấy ds nhiệm vụ
   const fetchTask = async ()=>{
     try {
-      const res = await api.get('/tasks')
+      const res = await api.get(`/tasks?filter=${dateQuery}`)
       settaskBuffer(res.data.tasks)
 
       //lấy số lượng của 2 trạng thái công việc đang làm/hoàn thành
@@ -51,7 +52,7 @@ const HomePage = () => {
         return task.status === 'active'
     
       case 'completed':
-        return task.status === 'completed'
+        return task.status === 'complete'
       default:
         return true
     }
@@ -94,7 +95,7 @@ const HomePage = () => {
         <div className='flex flex-col items-center justify-between gap-6 sm: flex-row'>
             <TaskListPagination/>
 
-            <DateTime/>
+            <DateTime dateQuery={dateQuery} setDateQuery = {setDateQuery}/>
         </div>
         
 
